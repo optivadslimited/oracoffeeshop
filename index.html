@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ORA Coffee</title>
+  <meta name="description" content="ORA specialty coffee, Casablanca. Choose your drinks and sweets, add notes for the barista, and pay.">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Instrument+Sans:ital,wght@0,400..700;1,400&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app" id="app" data-view="menu">
+
+    <!-- ===== MENU ===== -->
+    <section class="view view-menu" id="view-menu">
+      <header class="masthead">
+        <p class="eyebrow">Specialty coffee · Casablanca</p>
+        <h1 class="wordmark">ORA</h1>
+        <p class="tagline">A warm cup, unhurried.</p>
+        <p class="hint">Tap a product to choose how many and leave a note for the barista. All prices in MAD.</p>
+      </header>
+
+      <nav class="cats" id="cats" aria-label="Menu categories"></nav>
+
+      <main class="menu" id="menu"></main>
+
+      <footer class="colophon">
+        <span>ORA · Casablanca</span>
+        <span>ora.coffee</span>
+      </footer>
+    </section>
+
+    <!-- ===== ORDER (CART) ===== -->
+    <section class="view view-order" id="view-order" hidden>
+      <header class="viewbar">
+        <button class="linkbtn" type="button" data-go="menu">← Menu</button>
+        <h2 class="viewtitle">Your order</h2>
+      </header>
+      <main class="order" id="order"></main>
+    </section>
+
+    <!-- ===== PAYMENT ===== -->
+    <section class="view view-pay" id="view-pay" hidden>
+      <header class="viewbar">
+        <button class="linkbtn" type="button" data-go="order">← Order</button>
+        <h2 class="viewtitle">Payment</h2>
+      </header>
+      <main class="pay" id="pay"></main>
+    </section>
+
+    <!-- ===== DONE ===== -->
+    <section class="view view-done" id="view-done" hidden>
+      <main class="done" id="done"></main>
+    </section>
+
+    <!-- Bottom order bar -->
+    <div class="orderbar" id="orderbar" hidden>
+      <button class="orderbar-btn" type="button" id="orderbar-btn">
+        <span class="orderbar-count" id="orderbar-count">0 items</span>
+        <span class="orderbar-label">Review order</span>
+        <span class="orderbar-total" id="orderbar-total">0 MAD</span>
+      </button>
+    </div>
+
+    <!-- Product sheet -->
+    <div class="backdrop" id="backdrop" hidden></div>
+    <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-name" hidden>
+      <div class="sheet-grip" aria-hidden="true"></div>
+      <div class="sheet-head">
+        <div>
+          <h3 class="sheet-name" id="sheet-name"></h3>
+          <p class="sheet-desc" id="sheet-desc"></p>
+        </div>
+        <span class="sheet-price" id="sheet-price"></span>
+      </div>
+
+      <div class="field">
+        <span class="label">Quantity</span>
+        <div class="stepper">
+          <button class="step" type="button" id="sheet-minus" aria-label="Less">−</button>
+          <output class="step-val" id="sheet-qty">1</output>
+          <button class="step" type="button" id="sheet-plus" aria-label="More">+</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="sheet-notes">Notes for the barista</label>
+        <textarea class="notes" id="sheet-notes" rows="2" placeholder="Lactose-free milk, no sugar, extra shot…"></textarea>
+        <div class="chips" id="sheet-chips">
+          <button class="chip" type="button" data-note="Lactose-free milk">Lactose-free milk</button>
+          <button class="chip" type="button" data-note="Oat milk">Oat milk</button>
+          <button class="chip" type="button" data-note="No sugar">No sugar</button>
+          <button class="chip" type="button" data-note="Extra shot">Extra shot</button>
+          <button class="chip" type="button" data-note="Decaf">Decaf</button>
+          <button class="chip" type="button" data-note="To go">To go</button>
+        </div>
+      </div>
+
+      <div class="sheet-actions">
+        <button class="btn btn-ghost" type="button" id="sheet-remove" hidden>Remove</button>
+        <button class="btn btn-primary" type="button" id="sheet-add">
+          <span id="sheet-add-label">Add to order</span>
+          <span class="btn-amount" id="sheet-add-total"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script src="js/menu.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
