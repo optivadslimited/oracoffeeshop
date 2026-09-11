@@ -4,6 +4,9 @@
   "use strict";
 
   var MENU = window.ORA_MENU;
+  var ART = window.ORA_ART;
+  var TAGS = { hot: "Hot", cold: "Cold", food: "" };
+  var temp = "all"; // Purist hot/cold filter
   var STORE_KEY = "ora.order.v1";
   var CURRENCY = "MAD";
 
@@ -48,6 +51,13 @@
       .reduce(function (s, l) { return s + l.qty; }, 0);
   }
   function uid() { return Math.random().toString(36).slice(2, 9); }
+  function thumb(it, cls) {
+    var t = el("div", { class: "thumb" + (cls ? " " + cls : ""), "aria-hidden": "true" });
+    if (it.photo) t.appendChild(el("img", { src: it.photo, alt: "", loading: "lazy" }));
+    else t.innerHTML = ART(it);
+    if (it.available === false) t.appendChild(el("span", { class: "unavail", text: "unavailable" }));
+    return t;
+  }
 
   var toastTimer;
   function toast(msg) {
@@ -131,28 +141,42 @@
 
       var list = el("ul", { class: "items" });
       cat.items.forEach(function (it) {
-        list.appendChild(el("li", null, [
-          el("button", { class: "item", type: "button", onclick: function () { openSheet(it.id); } }, [
-            el("span", null, [
+        var off = it.available === false;
+        list.appendChild(el("li", { "data-temp": it.temp || "" }, [
+          el("button", { class: "item" + (off ? " unavailable" : ""), type: "button", "aria-disabled": off ? "true" : null,
+            onclick: function () { if (!off) openSheet(it.id); } }, [
+            thumb(it),
+            el("span", { class: "item-body" }, [
               el("span", { class: "item-name", text: it.name }),
-              el("span", { class: "item-desc", text: it.desc })
-            ]),
-            el("span", { class: "item-price", html: it.price + "<small>" + CURRENCY + "</small>" }),
-            el("span", { class: "item-add", "data-add": it.id, "aria-hidden": "true", text: "+" })
+              TAGS[it.temp] ? el("span", { class: "item-tag", text: TAGS[it.temp] }) : null,
+              el("span", { class: "item-desc", text: it.desc }),
+              el("span", { class: "item-foot" }, [
+                el("span", { class: "item-price", html: it.price + "<small>" + CURRENCY + "</small>" }),
+                el("span", { class: "item-add", "data-add": it.id, "aria-hidden": "true", text: "+" })
+              ])
+            ])
           ])
         ]));
       });
 
       menu.appendChild(el("section", { class: "section", id: "cat-" + cat.id }, [
-        el("div", { class: "section-head" }, [
-          el("div", null, [
-            el("h2", { class: "section-title", text: cat.name }),
-            cat.tagline ? el("p", { class: "section-tagline", text: cat.tagline }) : null
-          ]),
-          el("span", { class: "section-count", text: cat.items.length + (cat.items.length === 1 ? " item" : " items") })
-        ]),
+        el("div", { class: "section-band" }, [el("h2", { class: "section-title", text: cat.name })]),
+        cat.tagline ? el("p", { class: "section-tagline", text: cat.tagline }) : null,
         list
       ]));
+    });
+
+    // Hot / Cold filter (applies to the Purist section)
+    var subcats = $("#subcats");
+    subcats.addEventListener("click", function (e) {
+      var b = e.target.closest(".subcat");
+      if (!b) return;
+      temp = b.getAttribute("data-temp");
+      subcats.querySelectorAll(".subcat").forEach(function (x) { x.setAttribute("aria-current", x === b ? "true" : "false"); });
+      document.querySelectorAll("#cat-purist .items > li").forEach(function (li) {
+        li.hidden = temp !== "all" && li.getAttribute("data-temp") !== temp;
+      });
+      $("#cat-purist").scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
     // highlight the category in view
@@ -186,7 +210,12 @@
     var line = lineId && state.lines.find(function (l) { return l.id === lineId; });
     sheet = { itemId: itemId, qty: line ? line.qty : 1, notes: line ? line.notes : "", lineId: lineId || null };
     var it = ITEMS[itemId];
+    var fresh = thumb(it, "sheet-thumb");
+    fresh.id = "sheet-thumb";
+    $("#sheet-thumb").replaceWith(fresh);
     $("#sheet-name").textContent = it.name;
+    $("#sheet-tag").textContent = TAGS[it.temp] || "";
+    $("#sheet-tag").hidden = !TAGS[it.temp];
     $("#sheet-desc").textContent = it.desc;
     $("#sheet-price").textContent = money(it.price);
     $("#sheet-notes").value = sheet.notes;

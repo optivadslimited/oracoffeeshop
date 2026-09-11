@@ -16,6 +16,7 @@
 
     <!-- ===== MENU ===== -->
     <section class="view view-menu" id="view-menu">
+      <div class="topband">Ordering at ORA · Casablanca</div>
       <header class="masthead">
         <p class="eyebrow">Specialty coffee · Casablanca</p>
         <h1 class="wordmark">ORA</h1>
@@ -24,6 +25,11 @@
       </header>
 
       <nav class="cats" id="cats" aria-label="Menu categories"></nav>
+      <div class="subcats" id="subcats" role="group" aria-label="Hot or cold">
+        <button class="subcat" type="button" data-temp="all" aria-current="true">All</button>
+        <button class="subcat" type="button" data-temp="hot" aria-current="false">Hot</button>
+        <button class="subcat" type="button" data-temp="cold" aria-current="false">Cold</button>
+      </div>
 
       <main class="menu" id="menu"></main>
 
@@ -70,8 +76,10 @@
     <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-name" hidden>
       <div class="sheet-grip" aria-hidden="true"></div>
       <div class="sheet-head">
+        <div class="thumb sheet-thumb" id="sheet-thumb" aria-hidden="true"></div>
         <div>
           <h3 class="sheet-name" id="sheet-name"></h3>
+          <p class="sheet-tag" id="sheet-tag"></p>
           <p class="sheet-desc" id="sheet-desc"></p>
         </div>
         <span class="sheet-price" id="sheet-price"></span>
@@ -112,6 +120,7 @@
   </div>
 
   <script src="js/menu.js"></script>
+  <script src="js/art.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

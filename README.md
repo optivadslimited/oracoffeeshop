@@ -20,6 +20,9 @@ npx serve .
 - `index.html` — the page shell (menu, order, payment and confirmation views)
 - `css/styles.css` — styling (brand colours: black and `#eee7dc`)
 - `js/menu.js` — the menu data. Edit names, descriptions and prices here.
+  Each item has `temp` (`hot` / `cold` / `food`) and an `img` spec for its illustration.
+  Add `photo: "img/flat-white.jpg"` to show a real photo instead, or `available: false` to grey it out.
+- `js/art.js` — draws the illustrated product images (cups, iced cups, cookies, cakes, bottles).
 - `js/app.js` — ordering logic (cart, notes, payment flow). The cart is kept in `localStorage`.
 
 ## Payment
